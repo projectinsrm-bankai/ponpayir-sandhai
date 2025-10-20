@@ -1,11 +1,14 @@
-import {View, Text} from 'react-native'
-import React from 'react'
+// app/(tabs)/_layout.tsx
+import { Stack } from "expo-router";
+import '../globals.css';
 
-const _Layout = () => {
+export default function TabsLayout() {
     return (
-        <View>
-            <Text>_Layout</Text>
-        </View>
-    )
+        <Stack
+            screenOptions={{
+                headerShown: false,
+                contentStyle: { backgroundColor: '#F8FFDE' }
+            }}
+        />
+    );
 }
-export default _Layout

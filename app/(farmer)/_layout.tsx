@@ -1,11 +1,13 @@
-import {View, Text} from 'react-native'
-import React from 'react'
+import { Stack } from "expo-router";
+import '../globals.css'; // Adjust active path if needed
 
-const _Layout = () => {
+export default function FarmerLayout() {
     return (
-        <View>
-            <Text>_Layout</Text>
-        </View>
-    )
+        <Stack
+            screenOptions={{
+                headerShown: false,
+                contentStyle: { backgroundColor: '#F8FFDE' }, // Cream background for all auth pages
+            }}
+        />
+    );
 }
-export default _Layout
