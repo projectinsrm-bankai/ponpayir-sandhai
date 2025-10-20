@@ -1,0 +1,43 @@
+/app
+  /auth
+    /farmer
+      _layout.tsx   // shared wrapper for Farmer auth screens
+      sign-in.tsx
+      sign-up.tsx
+    /buyer
+      _layout.tsx   // shared wrapper for Buyer auth screens (optional)
+      sign-in.tsx
+      sign-up.tsx
+    /admin
+      _layout.tsx   // shared wrapper for Admin auth screens (optional)
+      sign-in.tsx
+      sign-up.tsx
+
+  /(buyer)
+    index.tsx            // Buyer homepage
+    orders.tsx
+    auctions.tsx
+    notifications.tsx
+    profile.tsx
+    checkout.tsx
+    // Add more buyer pages as needed
+  /(farmer)
+    index.tsx            // Farmer homepage
+    auctions.tsx
+    application.tsx
+    notifications.tsx
+    profile.tsx
+    // Add more farmer pages as needed
+  index.tsx              // Entry/main page (role selection)
+  _layout.tsx            // Top-level navigator/layout for the app
+/components
+  AuthForm.tsx           // Shared auth form component
+  // Other reusable UI components (Button, Card, Navbar, etc.)
+/constants
+  index.ts               // App constants (categories, sample data, etc.)
+/assets
+  /icons
+  /images
+  // Your static files
+/globals.css             // Tailwind and global styles
+/tailwind.config.js      // Tailwind config

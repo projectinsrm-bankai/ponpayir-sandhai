@@ -42,118 +42,147 @@ import success from "@/assets/images/success.png";
 import tomatoes from "@/assets/images/tomatoes.png";
 
 export const CATEGORIES = [
-    {
-        id: "1",
-        name: "All",
-    },
-    {
-        id: "2",
-        name: "Burger",
-    },
-    {
-        id: "3",
-        name: "Pizza",
-    },
-    {
-        id: "4",
-        name: "Wrap",
-    },
-    {
-        id: "5",
-        name: "Burrito",
-    },
+    { id: "1", name: "All" },
+    { id: "2", name: "Vegetables" },
+    { id: "3", name: "Fruits" },
+    { id: "4", name: "Grains" },
+    { id: "5", name: "Pulses" },
+    { id: "6", name: "Organic" },
 ];
 
-export const offers = [
+
+export const featuredProducts = [
     {
         id: 1,
-        title: "SUMMER COMBO",
-        image: burgerOne,
-        color: "#D33B0D",
+        name: "Organic Tomatoes",
+        farmer: "Rajesh",
+        price: 2.50, // per kg
+        priceUnit: "kg",
+        image: tomatoes, // reuse existing tomato image
+        color: "#F8FFDE", // cream background
     },
     {
         id: 2,
-        title: "BURGER BASH",
-        image: burgerTwo,
-        color: "#DF5A0C",
+        name: "Potato",
+        farmer: "Priya",
+        price: 1.80,
+        priceUnit: "kg",
+        image: onions, // placeholder until you add potato image
+        color: "#F8FFDE",
     },
     {
         id: 3,
-        title: "PIZZA PARTY",
-        image: pizzaOne,
-        color: "#084137",
+        name: "Carrot",
+        farmer: "Suresh",
+        price: 3.20,
+        priceUnit: "kg",
+        image: avocado, // placeholder
+        color: "#F8FFDE",
     },
     {
         id: 4,
-        title: "BURRITO DELIGHT",
-        image: buritto,
-        color: "#EB920C",
+        name: "Beetroot",
+        farmer: "Meena",
+        price: 4.50,
+        priceUnit: "500g",
+        image: mushrooms, // placeholder
+        color: "#F8FFDE",
     },
 ];
 
-export const sides = [
-    {
-        name: "Fries",
-        image: fries,
-        price: 3.5,
-    },
-    {
-        name: "Onion Rings",
-        image: onionRings,
-        price: 4.0,
-    },
-    {
-        name: "Mozarella Sticks",
-        image: mozarellaSticks,
-        price: 5.0,
-    },
-    {
-        name: "Coleslaw",
-        image: coleslaw,
-        price: 2.5,
-    },
-    {
-        name: "Salad",
-        image: salad,
-        price: 4.5,
-    },
-];
 
-export const toppings = [
+export const auctionItems = [
     {
-        name: "Avocado",
-        image: avocado,
-        price: 1.5,
-    },
-    {
-        name: "Bacon",
-        image: bacon,
-        price: 2.0,
-    },
-    {
-        name: "Cheese",
-        image: cheese,
-        price: 1.0,
-    },
-    {
-        name: "Cucumber",
-        image: cucumber,
-        price: 0.5,
-    },
-    {
-        name: "Mushrooms",
-        image: mushrooms,
-        price: 1.2,
-    },
-    {
-        name: "Onions",
-        image: onions,
-        price: 0.5,
-    },
-    {
-        name: "Tomatoes",
+        id: 1,
+        name: "Tomato",
+        description: "A tomato is an edible, fleshy berry from the nightshade family of plants, native to western South America but now grown globally.",
+        farmer: "Rajesh",
+        basePrice: 1200, // ₹
+        totalAvailable: 500, // kg
+        availableUnit: "kg",
         image: tomatoes,
-        price: 0.7,
+        isLive: true,
+        bids: [
+            { bidder: "You", amount: 1500, quantity: 250, time: "10:30 AM" },
+            { bidder: "Arun", amount: 1400, quantity: 280, time: "10:25 AM" },
+        ],
+    },
+    // Add more auction items as needed
+];
+
+
+export const orders = [
+    {
+        id: "#1234567890",
+        productName: "Tomato",
+        quantity: 5,
+        quantityUnit: "kg",
+        image: tomatoes,
+        progress: 25, // percentage (0-100)
+        status: "Order Placed", // "Order Placed", "Order Confirmed", "Shipped", "Delivered"
+        timeline: [
+            { status: "Order Placed", time: "10:00 AM", completed: true },
+            { status: "Order Confirmed", time: "12:00 PM", completed: true },
+            { status: "Shipped", time: "2:00 PM", completed: false },
+            { status: "Delivered", time: "4:00 PM", completed: false },
+        ],
+    },
+    {
+        id: "#1234567890",
+        productName: "Potato",
+        quantity: 5,
+        quantityUnit: "kg",
+        image: onions,
+        progress: 50,
+        status: "Order Confirmed",
+        timeline: [
+            { status: "Order Placed", time: "10:00 AM", completed: true },
+            { status: "Order Confirmed", time: "12:00 PM", completed: true },
+            { status: "Shipped", time: "2:00 PM", completed: false },
+            { status: "Delivered", time: "4:00 PM", completed: false },
+        ],
+    },
+    {
+        id: "#1234567890",
+        productName: "Raddish",
+        quantity: 5,
+        quantityUnit: "kg",
+        image: mushrooms,
+        progress: 75,
+        status: "Shipped",
+        timeline: [
+            { status: "Order Placed", time: "10:00 AM", completed: true },
+            { status: "Order Confirmed", time: "12:00 PM", completed: true },
+            { status: "Shipped", time: "2:00 PM", completed: true },
+            { status: "Delivered", time: "4:00 PM", completed: false },
+        ],
+    },
+];
+
+export const checkoutItems = [
+    {
+        id: 1,
+        name: "Organic Rice",
+        quantity: 1,
+        quantityUnit: "kg",
+        price: 10.00,
+        image: onions, // placeholder
+    },
+    {
+        id: 2,
+        name: "Organic Lentils",
+        quantity: 1,
+        quantityUnit: "kg",
+        price: 8.00,
+        image: mushrooms, // placeholder
+    },
+    {
+        id: 3,
+        name: "Organic Wheat",
+        quantity: 1,
+        quantityUnit: "kg",
+        price: 12.00,
+        image: avocado, // placeholder
     },
 ];
 
@@ -200,3 +229,12 @@ export const images = {
     trash,
     user,
 };
+
+// constants/index.js - STRUCTURE OVERVIEW
+
+// 1. Categories for filtering  → CATEGORIES
+// 2. Featured products for homepage grid → featuredProducts
+// 3. Auction items with bidding info → auctionItems
+// 4. User orders with tracking → orders
+// 5. Checkout cart items → checkoutItems
+// 6. All reusable icons and images → images
