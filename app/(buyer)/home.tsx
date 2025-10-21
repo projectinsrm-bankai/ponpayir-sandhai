@@ -1,304 +1,128 @@
-// app/buyer/index.tsx
-import React, { useState, useMemo } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  FlatList,
-  Dimensions,
-  StyleSheet,
-  Platform,
-} from "react-native";
-import { StatusBar } from "expo-status-bar";
-import ProductCard from "../../components/ProductCard";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView, View, Text, Image, Pressable, TextInput } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import BottomNavBuyer from "@/components/BottomNavBuyer";
+import {router} from "expo-router";
 
-const { width } = Dimensions.get("window");
-const HORIZONTAL_PADDING = 16; // px-4 on each side
-const GAP = 12;
-const NUM_COLS = 2;
-const CARD_WIDTH = (width - HORIZONTAL_PADDING * 2 - GAP * (NUM_COLS - 1)) / NUM_COLS;
+const filters = [
+  { name: "Category", value: "All" },
+  { name: "Price", value: "Any" },
+  { name: "Freshness", value: "All" }
+];
 
-type Product = {
-  id: string;
-  title: string;
-  farmer: string;
-  price: string;
-  image: { uri: string };
-};
-
-const PRODUCTS = [
+const products = [
   {
-    id: "1",
-    title: "Organic Tomatoes",
+    name: "Organic Tomatoes",
     farmer: "Rajesh",
     price: "$2.50/kg",
-    image: { uri: "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=800&q=60" },
+    freshness: "Fresh",
+    category: "Vegetable",
+    img: "https://images.pexels.com/photos/13272119/pexels-photo-13272119.jpeg?auto=compress&w=200&h=200"
   },
   {
-    id: "2",
-    title: "Potato",
+    name: "Potato",
     farmer: "Priya",
     price: "$1.80/kg",
-    image: { uri: "https://images.unsplash.com/photo-1542444459-db8e8b3d6b5b?w=800&q=60" },
+    freshness: "Normal",
+    category: "Vegetable",
+    img: "https://images.pexels.com/photos/2094122/pexels-photo-2094122.jpeg?auto=compress&w=200&h=200"
   },
   {
-    id: "3",
-    title: "Carrot",
+    name: "Carrot",
     farmer: "Suresh",
     price: "$3.20/kg",
-    image: { uri: "https://images.unsplash.com/photo-1611078483757-8b9b0b1f63bd?w=800&q=60" },
+    freshness: "Fresh",
+    category: "Vegetable",
+    img: "https://images.pexels.com/photos/65174/pexels-photo-65174.jpeg?auto=compress&w=200&h=200"
   },
   {
-    id: "4",
-    title: "Beetroot",
+    name: "Betroot",
     farmer: "Meena",
     price: "$4.50/500g",
-    image: { uri: "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?w=800&q=60" },
+    freshness: "Organic",
+    category: "Vegetable",
+    img: "https://images.pexels.com/photos/2664216/pexels-photo-2664216.jpeg?auto=compress&w=200&h=200"
   },
 ];
 
-
 export default function BuyerHome() {
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("Category");
-  const [price, setPrice] = useState("Price");
-  const [freshness, setFreshness] = useState("Freshness");
-
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (!q) return PRODUCTS;
-    return PRODUCTS.filter(
-      (p) =>
-        p.title.toLowerCase().includes(q) ||
-        p.farmer.toLowerCase().includes(q) ||
-        p.price.toLowerCase().includes(q)
-    );
-  }, [search]);
-
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar style="dark" />
-      {/* Header */}
-      <View style={styles.headerWrap}>
-        <View style={styles.headerRow}>
-          <TouchableOpacity style={styles.backBtn}>
-            <Text style={styles.backArrow}>◀</Text>
-          </TouchableOpacity>
+      <SafeAreaView className="flex-1 bg-primary-cream">
+        <ScrollView contentContainerStyle={{ paddingHorizontal: 18, paddingTop: 14 }}>
+          {/* Title and Avatar */}
+          <View className="flex-row items-center justify-center mb-2 mt-1">
+            <Ionicons name="person-circle" size={30} color="#B5B80A" style={{ marginRight: 10 }} />
+            <Text className="text-xl font-quicksand-bold text-primary">BUYER</Text>
+          </View>
 
-          <Text style={styles.headerTitle}>BUYER</Text>
+          {/* Filter Row */}
+          <View className="flex-row justify-between mb-3">
+            {filters.map((f, idx) => (
+                <Pressable
+                    key={f.name}
+                    className="flex-row items-center bg-[#F8FFDE] border border-[#BCD657] rounded-lg px-3 py-2"
+                    style={{ flex: 1, marginRight: idx < filters.length - 1 ? 10 : 0, elevation: 2 }}
+                >
+                  <Text className="font-quicksand-bold text-primary">{f.name}</Text>
+                  <Ionicons name="chevron-down-outline" size={16} color="#7A9608" style={{ marginLeft: 4 }} />
+                </Pressable>
+            ))}
+          </View>
 
-          <TouchableOpacity style={styles.infoBtn}>
-            <Text style={styles.infoText}>i</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Filters */}
-        <View style={styles.filtersRow}>
-          <TouchableOpacity style={styles.filterPill}><Text style={styles.filterText}>{category} ▾</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.filterPill}><Text style={styles.filterText}>{price} ▾</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.filterPill}><Text style={styles.filterText}>{freshness} ▾</Text></TouchableOpacity>
-        </View>
-
-        {/* Search */}
-        <View style={styles.searchWrap}>
+          {/* Search Bar */}
           <TextInput
-            placeholder="search products"
-            placeholderTextColor="#9A9A9A"
-            value={search}
-            onChangeText={setSearch}
-            style={styles.searchInput}
+              className="border border-dashed border-[#7A9608] rounded-xl px-5 py-3 mb-4 text-primary font-quicksand bg-white shadow-sm"
+              placeholder="search products"
+              placeholderTextColor="#7A9608"
           />
-          <TouchableOpacity style={styles.searchIcon}>
-            <Text style={{ fontSize: 16 }}>🔍</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
 
-      {/* Grid */}
-      <View style={styles.gridWrap}>
-        <FlatList
-          data={filtered}
-          keyExtractor={(i) => i.id}
-          numColumns={NUM_COLS}
-          columnWrapperStyle={{ justifyContent: "space-between", marginBottom: GAP }}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 120 }}
-          renderItem={({ item }) => (
-            <ProductCard
-              title={item.title}
-              farmer={item.farmer}
-              price={item.price}
-              image={item.image}
-              width={CARD_WIDTH}
-            />
-          )}
-        />
-      </View>
-
-      {/* Bottom nav */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItemActive}>
-          <Text style={styles.navIcon}>🏠</Text>
-          <Text style={styles.navLabelActive}>Home</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navItem}>
-          <Text style={styles.navIcon}>🔨</Text>
-          <Text style={styles.navLabel}>Auctions</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navItem}>
-          <Text style={styles.navIcon}>📦</Text>
-          <Text style={styles.navLabel}>Orders</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navItem}>
-          <Text style={styles.navIcon}>🔔</Text>
-          <Text style={styles.navLabel}>Notification</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navItem}>
-          <Text style={styles.navIcon}>👤</Text>
-          <Text style={styles.navLabel}>Profile</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+          {/* Product grid with overlays/tags */}
+          <View className="flex-row flex-wrap -mx-2 mb-8">
+            {products.map((prod, idx) => (
+                <Pressable
+                    key={prod.name + idx}
+                    className="bg-white m-2 p-2 rounded-2xl shadow-md"
+                    style={{
+                      width: '45%',
+                      elevation: 3,
+                      shadowColor: "#BCD657",
+                      shadowRadius: 16,
+                    }}
+                    onPress={() => router.push("../(buyer)/auctions")}
+                >
+                  {/* Image container */}
+                  <View style={{ position: "relative", marginBottom: 8 }}>
+                    <Image
+                        source={{ uri: prod.img }}
+                        style={{ width: "100%", height: 110, borderRadius: 18 }}
+                        resizeMode="cover"
+                    />
+                    {/* Tags: freshness and category */}
+                    <View style={{
+                      position: "absolute", left: 8, top: 8,
+                      backgroundColor: "#BCD657",
+                      borderRadius: 8, paddingHorizontal: 8, paddingVertical: 2,
+                    }}>
+                      <Text className="text-xs font-quicksand-bold text-white">{prod.freshness}</Text>
+                    </View>
+                    <View style={{
+                      position: "absolute", right: 8, top: 8,
+                      backgroundColor: "#7A9608",
+                      borderRadius: 8, paddingHorizontal: 6, paddingVertical: 2,
+                    }}>
+                      <Text className="text-xs font-quicksand-bold text-white">{prod.category}</Text>
+                    </View>
+                  </View>
+                  {/* Main info */}
+                  <Text className="font-quicksand-bold text-primary text-base mb-1">{prod.name}</Text>
+                  <Text className="font-quicksand text-[#86865C]">Farmer: {prod.farmer}</Text>
+                  <Text className="font-quicksand-bold text-[#BAA034] mt-1">{prod.price}</Text>
+                </Pressable>
+            ))}
+          </View>
+          <View style={{ height: 24 }} />
+        </ScrollView>
+        <BottomNavBuyer />
+      </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: "#F8FFDE", // primary.cream from your tailwind config
-  },
-  headerWrap: {
-    paddingHorizontal: HORIZONTAL_PADDING,
-    paddingTop: 12,
-    paddingBottom: 10,
-  },
-  headerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  backBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  backArrow: {
-    fontSize: 16,
-    color: "#1E1E1E",
-  },
-  headerTitle: {
-    fontFamily: "Quicksand-Bold",
-    color: "#7A96008A".slice(0, 7), // fallback in case, but we'll use explicit color below
-
-    fontSize: 16,
-    letterSpacing: 0.5,
-  },
-  infoBtn: {
-    width: 28,
-    height: 28,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  infoText: {
-    fontSize: 16,
-    color: "#1E1E1E",
-  },
-
-  filtersRow: {
-    flexDirection: "row",
-    marginTop: 12,
-    gap: 8,
-  },
-  filterPill: {
-    backgroundColor: "#F8FFDE",
-    borderRadius: 18,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderWidth: 1,
-    borderColor: "#DBE0E5",
-    shadowColor: "#000",
-    shadowOpacity: 0.03,
-    elevation: 1,
-  },
-  filterText: {
-    fontFamily: "Quicksand-Medium",
-    color: "#5C5C5C",
-    fontSize: 13,
-  },
-
-  searchWrap: {
-    marginTop: 12,
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "#D4D5D6",
-    borderRadius: 16,
-    paddingHorizontal: 12,
-    backgroundColor: "#FFFFFF",
-    height: 44,
-  },
-  searchInput: {
-    flex: 1,
-    fontFamily: "Quicksand-Regular",
-    fontSize: 14,
-    color: "#222",
-    paddingVertical: Platform.OS === "ios" ? 8 : 0,
-  },
-  searchIcon: {
-    width: 32,
-    alignItems: "center",
-  },
-
-  gridWrap: {
-    flex: 1,
-    paddingHorizontal: HORIZONTAL_PADDING,
-    marginTop: 12,
-  },
-
-  bottomNav: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "#FFFFFF",
-    borderTopWidth: 1,
-    borderTopColor: "#E8E8E8",
-    paddingVertical: 10,
-    paddingHorizontal: HORIZONTAL_PADDING,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
-  navItem: {
-    alignItems: "center",
-    flex: 1,
-  },
-  navItemActive: {
-    alignItems: "center",
-    flex: 1,
-  },
-  navIcon: {
-    fontSize: 18,
-  },
-  navLabel: {
-    fontFamily: "Quicksand-Regular",
-    fontSize: 11,
-    color: "#666",
-    marginTop: 4,
-  },
-  navLabelActive: {
-    fontFamily: "Quicksand-Medium",
-    fontSize: 11,
-    color: "#7A9608",
-    marginTop: 4,
-  },
-});

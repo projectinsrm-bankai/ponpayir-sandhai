@@ -1,236 +1,126 @@
-import React, { useState } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  Pressable,
-  StyleSheet,
-} from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView, View, Text, Image, Pressable } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
+import {router} from "expo-router";
 
-const PRODUCTS = [
+const items = [
   {
-    id: "rice",
-    title: "Organic Rice",
-    weight: "1kg",
-    price: 12,
-    image: {
-      uri: "https://cdn-icons-png.flaticon.com/512/7015/7015684.png",
-    },
+    name: "Organic Rice",
+    img: "https://images.pexels.com/photos/41957/rice-bowl-white-ceramic-41957.jpeg?auto=compress&w=80",
+    qty: "1kg"
   },
   {
-    id: "lentils",
-    title: "Organic Lentils",
-    weight: "1kg",
-    price: 10,
-    image: {
-      uri: "https://cdn-icons-png.flaticon.com/512/7015/7015647.png",
-    },
+    name: "Organic Lentils",
+    img: "https://images.pexels.com/photos/461382/pexels-photo-461382.jpeg?auto=compress&w=80",
+    qty: "1kg"
   },
   {
-    id: "wheat",
-    title: "Organic Wheat",
-    weight: "1kg",
-    price: 8,
-    image: {
-      uri: "https://cdn-icons-png.flaticon.com/512/7015/7015697.png",
-    },
+    name: "Organic Wheat",
+    img: "https://images.pexels.com/photos/221361/pexels-photo-221361.jpeg?auto=compress&w=80",
+    qty: "1kg"
   },
 ];
 
-export default function CheckoutScreen() {
-  const [selectedPayment, setSelectedPayment] = useState("credit");
-  const [accepted, setAccepted] = useState(false);
+const subtotal = 30.00;
+const shipping = 5.00;
+const total = subtotal + shipping;
+const paymentOptions = ["Credit Card (Gateway)", "Debit Card (Gateway)", "Mobile Payment (Gateway)"];
 
-  const subtotal = PRODUCTS.reduce((s, p) => s + p.price, 0);
-  const shipping = 5;
-  const total = subtotal + shipping;
+export default function CheckoutPage() {
+  const [selected, setSelected] = useState(0);
+  const [agreed, setAgreed] = useState(false);
 
   return (
-    <SafeAreaView className="flex-1 bg-primary-cream px-4">
-      <StatusBar style="dark" />
+      <SafeAreaView className="flex-1 bg-primary-cream">
+        <ScrollView contentContainerStyle={{ padding: 18 }}>
+          {/* Header */}
+          <View className="flex-row items-center mb-2">
+            <Pressable>
+              <Ionicons name="arrow-back-outline" size={28} color="#7A9608" />
+            </Pressable>
+            <Text className="mx-auto font-quicksand-bold text-xl text-[#222]">Checkout</Text>
+          </View>
+          <View className="h-1 bg-[#BCD657] rounded-xl mb-4" />
 
-      {/* Header */}
-      <View className="flex-row items-center justify-between py-4">
-        <TouchableOpacity>
-          <Image
-            source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/507/507257.png",
-            }}
-            style={{ width: 18, height: 18, tintColor: "#000" }}
-          />
-        </TouchableOpacity>
-        <Text className="text-lg font-quicksand-bold text-dark-100">
-          Checkout
-        </Text>
-        <View style={{ width: 18 }} />
-      </View>
-
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Order Summary */}
-        <View className="bg-primary-cream rounded-xl p-4 shadow-md shadow-black/10 mb-4">
-          <Text className="text-lg font-quicksand-bold mb-3 text-dark-100">
-            Order Summary
-          </Text>
-
-          {PRODUCTS.map((p) => (
-            <View
-              key={p.id}
-              className="flex flex-row items-center justify-between mb-3"
-            >
-              <View className="flex-row items-center gap-3">
-                <Image
-                  source={p.image}
-                  style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 10,
-                    backgroundColor: "#F8FFDE",
-                  }}
-                />
-                <View>
-                  <Text className="text-base font-quicksand-semibold text-dark-100">
-                    {p.title}
-                  </Text>
-                  <Text className="text-sm text-gray-400">{p.weight}</Text>
+          {/* Order Summary */}
+          <View className="mb-4">
+            <Text className="font-quicksand-bold text-lg mb-2 text-primary">Order Summary</Text>
+            {items.map((item, i) => (
+                <View key={item.name} className="flex-row items-center mb-2">
+                  <Image
+                      source={{ uri: item.img }}
+                      style={{ width: 38, height: 38, borderRadius: 10, marginRight: 10 }}
+                  />
+                  <View>
+                    <Text className="font-quicksand-bold text-primary">{item.name}</Text>
+                    <Text className="font-quicksand text-[#576423]">{item.qty}</Text>
+                  </View>
                 </View>
-              </View>
-              <Text className="text-base font-quicksand-semibold text-dark-100">
-                ${p.price.toFixed(2)}
-              </Text>
+            ))}
+            <View className="mt-2 flex-row justify-between">
+              <Text className="text-[#7A9608] font-quicksand-bold">Subtotal</Text>
+              <Text className="text-[#606918] font-quicksand-bold">${subtotal.toFixed(2)}</Text>
             </View>
-          ))}
-
-          <View className="border-t border-gray-100 mt-3 pt-3">
-            <View className="flex flex-row justify-between mb-2">
-              <Text className="text-base text-gray-400 font-quicksand-medium">
-                Subtotal
-              </Text>
-              <Text className="text-base font-quicksand-semibold text-dark-100">
-                ${subtotal.toFixed(2)}
-              </Text>
+            <View className="flex-row justify-between">
+              <Text className="text-[#7A9608] font-quicksand-bold">Shipping</Text>
+              <Text className="text-[#606918] font-quicksand-bold">${shipping.toFixed(2)}</Text>
             </View>
-            <View className="flex flex-row justify-between mb-2">
-              <Text className="text-base text-gray-400 font-quicksand-medium">
-                Shipping
-              </Text>
-              <Text className="text-base font-quicksand-semibold text-dark-100">
-                ${shipping.toFixed(2)}
-              </Text>
-            </View>
-            <View className="flex flex-row justify-between border-t border-gray-100 pt-3">
-              <Text className="text-lg font-quicksand-bold text-dark-100">
-                Total
-              </Text>
-              <Text className="text-lg font-quicksand-bold text-dark-100">
-                ${total.toFixed(2)}
-              </Text>
+            <View className="border border-dashed border-[#7A9608] rounded-xl flex-row justify-between mt-2 px-2 py-2 bg-[#F8FFDE]">
+              <Text className="font-quicksand-bold text-[#7A9608]">Total</Text>
+              <Text className="font-quicksand-bold text-primary">${total.toFixed(2)}</Text>
             </View>
           </View>
-        </View>
 
-        {/* Payment Method */}
-        <View className="bg-primary-cream rounded-xl p-4 shadow-md shadow-black/10 mb-4">
-          <Text className="text-lg font-quicksand-bold mb-3 text-dark-100">
-            Payment Method
-          </Text>
+          {/* Payment Method (just selector, not entry) */}
+          <View className="mb-4">
+            <Text className="font-quicksand-bold text-lg mb-2 text-primary">Payment Method</Text>
+            {paymentOptions.map((option, idx) => (
+                <Pressable
+                    key={option}
+                    onPress={() => setSelected(idx)}
+                    className={`flex-row items-center justify-between px-4 py-3 mb-2 rounded-xl border ${
+                        selected === idx
+                            ? "border-[#7A9608] bg-[#EAF6BC]"
+                            : "border-[#BCD657] bg-white"
+                    }`}
+                    style={{ elevation: selected === idx ? 2 : 0 }}
+                >
+                  <Text className={`font-quicksand-bold ${selected === idx ? "text-[#7A9608]" : "text-primary"}`}>{option}</Text>
+                  {selected === idx ? (
+                      <Ionicons name="radio-button-on" size={22} color="#7A9608" />
+                  ) : (
+                      <Ionicons name="radio-button-off" size={22} color="#BCD657" />
+                  )}
+                </Pressable>
+            ))}
+          </View>
 
-          {[
-            { id: "credit", label: "Credit Card" },
-            { id: "debit", label: "Debit Card" },
-            { id: "mobile", label: "Mobile Payment" },
-          ].map((method) => {
-            const isSelected = selectedPayment === method.id;
-            return (
-              <TouchableOpacity
-                key={method.id}
-                onPress={() => setSelectedPayment(method.id)}
-                className="flex flex-row items-center justify-between py-3"
-              >
-                <View className="flex flex-row items-center gap-3">
-                  <View
-                    style={[
-                      styles.radioOuter,
-                      {
-                        borderColor: isSelected ? "#7A9608" : "#CFCFCF",
-                      },
-                    ]}
-                  >
-                    {isSelected && <View style={styles.radioInner} />}
-                  </View>
-                  <Text className="text-base text-dark-100 font-quicksand-medium">
-                    {method.label}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
+          {/* Terms & Conditions */}
+          <View className="flex-row items-center mb-5 mt-3">
+            <Pressable onPress={() => setAgreed(!agreed)} className="mr-2">
+              <Ionicons
+                  name={agreed ? "checkmark-circle" : "ellipse-outline"}
+                  size={22}
+                  color={agreed ? "#7A9608" : "#BCD657"}
+              />
+            </Pressable>
+            <Text className="font-quicksand text-[#444444]">Accept the terms and conditions</Text>
+          </View>
 
-          {/* Terms */}
-          <TouchableOpacity
-            onPress={() => setAccepted((prev) => !prev)}
-            className="flex flex-row items-center mt-4 gap-3"
+          {/* Proceed Button */}
+          <Pressable
+              disabled={!agreed}
+              className={`h-12 rounded-xl ${agreed ? "bg-[#B5B80A]" : "bg-[#F7F3E6]"} justify-center items-center`}
+              onPress={() => router.push("../(buyer)/payment-success")}
+              style={{ elevation: 3 }}
+
           >
-            <View
-              style={[
-                styles.checkbox,
-                accepted && {
-                  backgroundColor: "#7A9608",
-                  borderColor: "#7A9608",
-                },
-              ]}
-            />
-            <Text className="text-sm text-gray-400 font-quicksand-medium">
-              Accept the terms and conditions
-            </Text>
-          </TouchableOpacity>
+            <Text className={`${agreed ? "text-white" : "text-[#7A9608]"} font-quicksand-bold text-lg`}>Proceed To Payment</Text>
+          </Pressable>
 
-          {/* Proceed button */}
-          <TouchableOpacity
-            disabled={!accepted}
-            className="mt-5"
-            style={{
-              backgroundColor: "#7A9608",
-              borderRadius: 12,
-              paddingVertical: 14,
-              opacity: accepted ? 1 : 0.5,
-            }}
-          >
-            <Text className="text-center text-white font-quicksand-bold text-base">
-              Proceed To Payments
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View className="h-8" />
-      </ScrollView>
-    </SafeAreaView>
+          <View style={{ height: 28 }} />
+        </ScrollView>
+      </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  radioOuter: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 2,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  radioInner: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: "#7A9608",
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 4,
-    borderWidth: 2,
-    borderColor: "#CFCFCF",
-  },
-});

@@ -1,7 +1,7 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, View, Text, Pressable } from "react-native";
 import { Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import BottomNav from "@/components/BottomNav";
+import BottomNavBuyer from "@/components/BottomNav";
 
 const notifications = [
     {
@@ -76,7 +76,7 @@ export default function NotificationsPage() {
                     ))}
                 </View>
             </ScrollView>
-            <BottomNav />
+            <BottomNavBuyer />
         </SafeAreaView>
     );
 }

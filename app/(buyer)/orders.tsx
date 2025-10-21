@@ -1,7 +1,7 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, View, Text, Image, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import BottomNav from "@/components/BottomNav";
+import BottomNavBuyer from "@/components/BottomNavBuyer";
 
 const orders = [
     {
@@ -98,7 +98,7 @@ export default function OrdersPage() {
                 </View>
             </ScrollView>
 
-            <BottomNav />
+            <BottomNavBuyer />
         </SafeAreaView>
     );
 }

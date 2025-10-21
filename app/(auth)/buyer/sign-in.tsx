@@ -35,7 +35,7 @@ const BuyerSignIn = () => {
                     />
                 </View>
 
-                <Pressable className="mt-6 h-12 rounded-xl bg-[#7A9608] justify-center items-center">
+                <Pressable className="mt-6 h-12 rounded-xl bg-[#7A9608] justify-center items-center" onPress={() => router.push("/(buyer)/home")}>
                     <Text className="text-white font-quicksand-bold text-base">Sign In</Text>
                 </Pressable>
 

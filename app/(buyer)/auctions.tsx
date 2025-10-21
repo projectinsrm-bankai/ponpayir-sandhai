@@ -1,403 +1,98 @@
-// app/auction/auction.tsx
-import React, { useState } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-  Platform,
-} from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView, View, Text, Image, Pressable } from "react-native";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import BottomNavBuyer from "@/components/BottomNavBuyer";
+import {router} from "expo-router";
 
-const { width } = Dimensions.get("window");
-const PADDING = 12;
-const IMAGE_SIZE = width - PADDING * 2; // full-width square image with side padding
+const product = {
+  name: "Organic Tomatoes",
+  farmer: "Rajesh",
+  price: "$2.50/kg",
+  freshness: "Fresh",
+  place: "Trichy",
+  video: true,
+  img: "https://images.pexels.com/photos/13272119/pexels-photo-13272119.jpeg?auto=compress&w=600&h=400",
+  desc: "A tomato is an edible, fleshy berry from the nightshade family of plants, native to western South America but now grown globally.",
+  timeLeft: "2h"
+};
 
-export default function AuctionDetail() {
-  const [activeTab, setActiveTab] = useState<"Description" | "Place" | "Video">("Description");
-  const [activeNav, setActiveNav] = useState<"home" | "auctions" | "orders" | "notify" | "profile">(
-    "auctions"
-  );
+const tabs = ["Description", "Place", "Video"];
 
-  const product = {
-    title: "Organic Tomatoes",
-    farmer: "Rajesh",
-    price: "$2.50/kg",
-    image: {
-      // high-res Unsplash image — reliable
-      uri: "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=1200&q=80&auto=format&fit=crop",
-    },
-    description:
-      "A tomato is an edible, fleshy berry from the nightshade family of plants, native to western South America but now grown globally. Juicy and bright — perfect for fresh salads.",
-    timeLeft: "2h",
-  };
-
-  // icon URIs (flaticon / simple png) — used for bottom nav
-  const ICONS = {
-    back: "https://cdn-icons-png.flaticon.com/512/271/271220.png",
-    home: "https://cdn-icons-png.flaticon.com/512/1946/1946436.png",
-    auctions: "https://cdn-icons-png.flaticon.com/512/2963/2963387.png",
-    orders: "https://cdn-icons-png.flaticon.com/512/833/833524.png",
-    notify: "https://cdn-icons-png.flaticon.com/512/1827/1827345.png",
-    profile: "https://cdn-icons-png.flaticon.com/512/1077/1077114.png",
-  };
+export default function ProductDetail() {
+  const activeTab = tabs[0]; // Set from state if needed
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar style="dark" />
+      <SafeAreaView className="flex-1 bg-primary-cream">
+        <ScrollView contentContainerStyle={{ padding: 0 }}>
+          {/* Header */}
+          <View className="flex-row items-center px-4 py-3 bg-[#F8FFDE]">
+            <Pressable>
+              <Ionicons name="arrow-back-outline" size={28} color="#7A9608" />
+            </Pressable>
+            <Text className="text-xl font-quicksand-bold text-primary ml-3">Product Details</Text>
+          </View>
 
-      {/* Top small back arrow area */}
-      <View style={styles.topBar}>
-        <TouchableOpacity style={styles.backBtn}>
-          <Image source={{ uri: ICONS.back }} style={styles.backIcon} />
-        </TouchableOpacity>
-      </View>
+          {/* Raised product image card */}
+          <View style={{
+            margin: 20, borderRadius: 22, overflow: "hidden",
+            shadowColor: "#BCD657", shadowRadius: 14, elevation: 4
+          }}>
+            <Image
+                source={{ uri: product.img }}
+                style={{ width: "100%", height: 175 }}
+                resizeMode="cover"
+            />
+            {/* Product Info Overlay */}
+            <View style={{
+              position: "absolute", bottom: 0, left: 0, right: 0,
+              backgroundColor: "rgba(248,255,222,0.94)", padding: 18
+            }}>
+              <Text className="font-quicksand-bold text-primary text-lg">{product.name}</Text>
+              <Text className="font-quicksand text-[#67671A] mb-1">Farmer: {product.farmer}</Text>
+              <Text className="font-quicksand text-[#576423] mb-1">{product.price}</Text>
+            </View>
+          </View>
 
-      <ScrollView contentContainerStyle={{ paddingBottom: 140 }}>
-        {/* Full-width image */}
-        <View style={styles.imageWrap}>
-          <Image
-            source={product.image}
-            style={styles.productImage}
-            // explicit width and height to prevent collapse on all platforms
-            width={IMAGE_SIZE}
-            height={IMAGE_SIZE}
-          />
-        </View>
-
-        {/* Info area */}
-        <View style={styles.infoWrap}>
-          <Text style={styles.title}>{product.title}</Text>
-          <Text style={styles.farmer}>Farmer: {product.farmer}</Text>
-          <Text style={styles.price}>{product.price}</Text>
-
-          {/* Pills row */}
-          <View style={styles.pillRow}>
-            {(["Description", "Place", "Video"] as const).map((t) => {
-              const isActive = activeTab === t;
-              return (
-                <TouchableOpacity
-                  key={t}
-                  activeOpacity={0.85}
-                  onPress={() => setActiveTab(t)}
-                  style={[styles.pill, isActive && styles.pillActive]}
+          {/* Segmented tabs */}
+          <View className="flex-row justify-center items-center mb-2">
+            {tabs.map((tab, idx) => (
+                <Pressable
+                    key={tab}
+                    className={`px-5 py-2 mx-2 rounded-lg ${activeTab === tab ? "bg-[#7A9608]" : "bg-[#F8FFDE] border border-[#BCD657]"}`}
+                    style={{ elevation: activeTab === tab ? 2 : 0 }}
                 >
-                  <Text style={[styles.pillText, isActive && styles.pillTextActive]}>
-                    {t} ▾
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+                  <Text className={`font-quicksand-bold ${activeTab === tab ? "text-white" : "text-[#7A9608]"}`}>{tab}</Text>
+                </Pressable>
+            ))}
           </View>
 
-          {/* Description dotted card */}
-          <View style={styles.descCard}>
-            <View style={styles.descHeader}>
-              <View style={styles.descIconCircle}>
-                <Text style={styles.checkMark}>✔</Text>
+          {/* Description/Place/Video Panel */}
+          <View className="px-7 py-5 rounded-xl bg-gradient-to-b from-[#EAF6BC] to-[#F8FFDE] shadow-sm mb-5 mt-1">
+            {/* Tab-specific content; here, description */}
+            <View className="flex-row items-center mb-3">
+              <View className="bg-[#7A9608] rounded-full p-2 mr-3">
+                <Ionicons name="checkmark" size={18} color="#fff" />
               </View>
-              <Text style={styles.descHeaderText}>Description</Text>
-              <View style={{ flex: 1 }} />
-              <Text style={styles.timeText}>{product.timeLeft}</Text>
+              <Text className="font-quicksand-bold text-primary">Description</Text>
+              <Text className="ml-2 text-xs text-[#B5B80A] font-quicksand">{product.timeLeft} left</Text>
             </View>
-
-            <Text style={styles.descText}>{product.description}</Text>
+            <Text className="text-[#576423] font-quicksand" style={{ lineHeight: 22 }}>
+              {product.desc}
+            </Text>
           </View>
 
-          {/* CTA dotted outer + inner green box */}
-          <View style={styles.ctaOuter}>
-            <View style={styles.ctaInner}>
-              <Text style={styles.ctaTitle}>Start Entry for this Auction</Text>
-
-              <TouchableOpacity style={styles.enterBtn} activeOpacity={0.9}>
-                <Text style={styles.enterBtnText}>Enter</Text>
-              </TouchableOpacity>
+          {/* Entry Button */}
+          <View className="px-8">
+            <View className="border border-dashed border-[#BCD657] p-5 rounded-xl bg-[#F8FFDE] items-center mb-6">
+              <Text className="font-quicksand-bold text-primary mb-2">Start Entry for this Auction</Text>
+              <Pressable className="w-2/3 h-12 rounded-xl bg-[#7A9608] justify-center items-center shadow-md" style={{ elevation: 2 }} onPress={() => router.push("../auctionentry")}>
+                <Text className="text-white font-quicksand-bold text-lg">Enter</Text>
+              </Pressable>
             </View>
           </View>
-        </View>
-      </ScrollView>
-
-      {/* Bottom nav bar */}
-      <View style={styles.bottomNav}>
-        <NavItem
-          iconUri={ICONS.home}
-          label="Home"
-          active={activeNav === "home"}
-          onPress={() => setActiveNav("home")}
-        />
-        <NavItem
-          iconUri={ICONS.auctions}
-          label="Auctions"
-          active={activeNav === "auctions"}
-          onPress={() => setActiveNav("auctions")}
-        />
-        <NavItem
-          iconUri={ICONS.orders}
-          label="Orders"
-          active={activeNav === "orders"}
-          onPress={() => setActiveNav("orders")}
-        />
-        <NavItem
-          iconUri={ICONS.notify}
-          label="Notification"
-          active={activeNav === "notify"}
-          onPress={() => setActiveNav("notify")}
-        />
-        <NavItem
-          iconUri={ICONS.profile}
-          label="Profile"
-          active={activeNav === "profile"}
-          onPress={() => setActiveNav("profile")}
-        />
-      </View>
-    </SafeAreaView>
+          <View style={{ height: 24 }} />
+        </ScrollView>
+        <BottomNavBuyer />
+      </SafeAreaView>
   );
 }
-
-function NavItem({
-  iconUri,
-  label,
-  active,
-  onPress,
-}: {
-  iconUri: string;
-  label: string;
-  active: boolean;
-  onPress: () => void;
-}) {
-  return (
-    <TouchableOpacity activeOpacity={0.9} onPress={onPress} style={styles.navItem}>
-      <View>{active ? <View style={styles.activePill}><Image source={{ uri: iconUri }} style={styles.activeIcon} /></View> : <Image source={{ uri: iconUri }} style={styles.icon} />}</View>
-      <Text style={[styles.navLabel, active && styles.navLabelActive]}>{label}</Text>
-    </TouchableOpacity>
-  );
-}
-
-/* ---- styles ---- */
-const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: "#F8FFDE", // primary cream
-  },
-
-  topBar: {
-    height: 48,
-    justifyContent: "center",
-    paddingHorizontal: PADDING,
-  },
-  backBtn: {
-    width: 36,
-    height: 36,
-    alignItems: "flex-start",
-    justifyContent: "center",
-  },
-  backIcon: {
-    width: 16,
-    height: 16,
-    tintColor: "#17300b",
-    resizeMode: "contain",
-  },
-
-  imageWrap: {
-    paddingHorizontal: PADDING,
-    paddingTop: 6,
-  },
-  productImage: {
-    width: IMAGE_SIZE,
-    height: IMAGE_SIZE,
-    borderRadius: 8,
-    resizeMode: "cover",
-    backgroundColor: "#eee",
-  },
-
-  infoWrap: {
-    paddingHorizontal: 14,
-    paddingTop: 12,
-  },
-
-  title: {
-    fontFamily: "Quicksand-SemiBold",
-    fontSize: 15,
-    color: "#1E1E1E",
-    marginBottom: 6,
-  },
-  farmer: {
-    fontFamily: "Quicksand-Regular",
-    fontSize: 12,
-    color: "#6B6B6B",
-  },
-  price: {
-    fontFamily: "Quicksand-Medium",
-    color: "#7A9608",
-    marginTop: 8,
-  },
-
-  pillRow: {
-    flexDirection: "row",
-    marginTop: 14,
-    gap: 8,
-  },
-  pill: {
-    borderWidth: 1,
-    borderColor: "#D4D5D6",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 18,
-    backgroundColor: "#F8FFDE",
-  },
-  pillActive: {
-    backgroundColor: "#EAF6BC",
-    borderColor: "#D5E8A8",
-  },
-  pillText: {
-    fontFamily: "Quicksand-Medium",
-    fontSize: 13,
-    color: "#222",
-  },
-  pillTextActive: {
-    color: "#7A9608",
-  },
-
-  descCard: {
-    marginTop: 14,
-    borderWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "#D4D5D6",
-    borderRadius: 12,
-    backgroundColor: "#FFFFFF",
-    padding: 12,
-  },
-  descHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  descIconCircle: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: "#EAF6BC",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 8,
-    borderWidth: 1,
-    borderColor: "#D5E8A8",
-  },
-  checkMark: {
-    color: "#7A9608",
-  },
-  descHeaderText: {
-    fontFamily: "Quicksand-SemiBold",
-    fontSize: 13,
-    color: "#1E1E1E",
-  },
-  timeText: {
-    fontFamily: "Quicksand-Regular",
-    fontSize: 12,
-    color: "#7A9608",
-  },
-  descText: {
-    fontFamily: "Quicksand-Regular",
-    fontSize: 13,
-    color: "#333",
-    lineHeight: 18,
-  },
-
-  ctaOuter: {
-    marginTop: 18,
-    marginHorizontal: 2,
-    borderWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "#D4D5D6",
-    borderRadius: 14,
-    padding: 12,
-    backgroundColor: "#F8FFDE",
-  },
-  ctaInner: {
-    backgroundColor: "#F3F8D8",
-    borderRadius: 10,
-    paddingVertical: 14,
-    paddingHorizontal: 12,
-    alignItems: "center",
-  },
-  ctaTitle: {
-    fontFamily: "Quicksand-Medium",
-    color: "#1E1E1E",
-    fontSize: 14,
-    marginBottom: 12,
-  },
-  enterBtn: {
-    width: 120,
-    height: 38,
-    borderRadius: 10,
-    backgroundColor: "#7A9608",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  enterBtnText: {
-    color: "#fff",
-    fontFamily: "Quicksand-Bold",
-  },
-
-  bottomNav: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 78 + (Platform.OS === "ios" ? 6 : 0),
-    backgroundColor: "#FFFFFF",
-    borderTopWidth: 1,
-    borderTopColor: "#E8E8E8",
-    paddingHorizontal: 12,
-    paddingTop: 8,
-    flexDirection: "row",
-    alignItems: "flex-end",
-    justifyContent: "space-between",
-  },
-
-  navItem: {
-    flex: 1,
-    alignItems: "center",
-  },
-
-  activePill: {
-    width: 56,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: "#EAF6BC",
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "#D5E8A8",
-    marginBottom: 6,
-  },
-
-  activeIcon: {
-    width: 20,
-    height: 20,
-    tintColor: "#7A9608",
-    resizeMode: "contain",
-  },
-
-  icon: {
-    width: 20,
-    height: 20,
-    tintColor: "#8A8A8A",
-    resizeMode: "contain",
-    marginBottom: 6,
-  },
-
-  navLabel: {
-    fontFamily: "Quicksand-Regular",
-    fontSize: 11,
-    color: "#666",
-  },
-  navLabelActive: {
-    fontFamily: "Quicksand-Medium",
-    color: "#7A9608",
-  },
-});
