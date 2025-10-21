@@ -3,4 +3,5 @@ s.no - usecase - branch name - user
 -----------------------------
 1. initial setup - tester - sanjay
 https://www.perplexity.ai/search/see-what-i-have-to-do-is-ponpa-TAW27UCoTvC0OErJ3hcg.Q#34
-2. 2nd ui auth setup - ui partone
+2. 2nd ui auth setup - ui partone - sanjay
+3. 3nd ux buyer setup - Aasdfghjkl - bernesh
