@@ -10,7 +10,7 @@ const BottomNav = () => {
                 <Ionicons name="home" size={24} color="#7A9608" />
                 <Text className="text-xs mt-1 text-primary">Home</Text>
             </Pressable>
-            <Pressable className="items-center flex-1" onPress={() => router.push("/(farmer)/home")}>
+            <Pressable className="items-center flex-1" onPress={() => router.push("/(farmer)/report")}>
                 <Ionicons name="analytics-outline" size={22} color="#7A9608" />
                 <Text className="text-xs mt-1 text-primary">Reports</Text>
             </Pressable>
