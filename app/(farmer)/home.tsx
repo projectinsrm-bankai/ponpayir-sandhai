@@ -1,6 +1,8 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, View, Text, Pressable } from "react-native";
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import {router} from "expo-router";
+import BottomNav from "@/components/BottomNav";
 
 export default function FarmerDashboard() {
     return (
@@ -36,7 +38,7 @@ export default function FarmerDashboard() {
                 {/* Auction Action & Quick Status */}
                 <View className="bg-[#F8FFDE] border border-dashed border-[#444444] rounded-xl p-4 mb-4 items-center">
                     <Text className="mb-2 font-quicksand-semibold text-primary text-base">Start Auction Entry</Text>
-                    <Pressable className="w-2/3 h-12 rounded-lg bg-primary justify-center items-center mb-2">
+                    <Pressable className="w-2/3 h-12 rounded-lg bg-primary justify-center items-center mb-2" onPress={() => router.push("../(farmer)/application")}>
                         <Text className="text-white font-quicksand-bold text-lg tracking-wide">Enter</Text>
                     </Pressable>
                     <Text className="text-xs text-[#7A9608] mt-1">3 auctions active • Next close: 6:00pm</Text>
@@ -93,32 +95,7 @@ export default function FarmerDashboard() {
             </ScrollView>
 
             {/* Modern Bottom Bar Navigation */}
-            <View className="flex-row bg-[#F8FFDE] border-t border-[#EAF6BC] py-2 px-1 justify-between items-center">
-                <Pressable className="items-center flex-1">
-                    <Ionicons name="home" size={24} color="#7A9608" />
-                    <Text className="text-xs mt-1 text-primary">Home</Text>
-                </Pressable>
-                <Pressable className="items-center flex-1">
-                    <Ionicons name="analytics-outline" size={22} color="#7A9608" />
-                    <Text className="text-xs mt-1 text-primary">Reports</Text>
-                </Pressable>
-                <Pressable className="items-center flex-1">
-                    <Ionicons name="pricetag-outline" size={22} color="#7A9608" />
-                    <Text className="text-xs mt-1 text-primary">Auctions</Text>
-                </Pressable>
-                <Pressable className="items-center flex-1">
-                    <Ionicons name="list" size={22} color="#7A9608" />
-                    <Text className="text-xs mt-1 text-primary">Orders</Text>
-                </Pressable>
-                <Pressable className="items-center flex-1">
-                    <Ionicons name="notifications-outline" size={22} color="#7A9608" />
-                    <Text className="text-xs mt-1 text-primary">Notification</Text>
-                </Pressable>
-                <Pressable className="items-center flex-1">
-                    <Ionicons name="person-outline" size={22} color="#7A9608" />
-                    <Text className="text-xs mt-1 text-primary">Profile</Text>
-                </Pressable>
-            </View>
+            <BottomNav />
         </SafeAreaView>
     );
 }
