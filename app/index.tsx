@@ -19,14 +19,12 @@ export default function Index() {
             <View className="gap-y-6">
                 <Pressable
                     className="w-full rounded-xl h-12 justify-center items-center bg-[#7A9608]"
-                    // onPress={() => router.push('/auth/farmer-login')}
                     onPress={() => router.push('/(auth)/farmer/sign-in')}
                 >
                     <Text className="text-white text-base font-quicksand-bold">Farmer</Text>
                 </Pressable>
                 <Pressable
                     className="w-full rounded-xl h-12 justify-center items-center bg-[#7A9608]"
-                    // onPress={() => router.push('/auth/buyer-login')}
                     onPress={() => router.push('/(auth)/buyer/sign-in')}
                 >
                     <Text className="text-white text-base font-quicksand-bold">Buyer</Text>

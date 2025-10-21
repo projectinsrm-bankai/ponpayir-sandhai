@@ -1,11 +1,13 @@
-import {View, Text} from 'react-native'
-import React from 'react'
+import { Stack } from "expo-router";
+import '../../globals.css'; // Adjust the path as needed
 
-const _Layout = () => {
+export default function BuyerLayout() {
     return (
-        <View>
-            <Text>_Layout</Text>
-        </View>
-    )
+        <Stack
+            screenOptions={{
+                headerShown: false,
+                contentStyle: { backgroundColor: '#F8FFDE' }
+            }}
+        />
+    );
 }
-export default _Layout
