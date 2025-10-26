@@ -2,6 +2,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, View, Text, Image, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import BottomNav from "@/components/BottomNav";
+import BottomNavBuyer from "@/components/BottomNavBuyer";
 
 const auctionData = [
     {
@@ -86,7 +87,7 @@ export default function AuctionList() {
             </ScrollView>
 
             {/* Bottom Nav Bar */}
-            <BottomNav />
+            <BottomNavBuyer />
         </SafeAreaView>
     );
 }

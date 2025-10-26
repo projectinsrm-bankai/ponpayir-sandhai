@@ -1,58 +1,95 @@
 // app/(auth)/buyer/sign-in.tsx
-import { View, Text } from 'react-native';
-import React from 'react';
-import { SafeAreaView } from "react-native-safe-area-context";
-import '../../globals.css';
-import { TextInput, Pressable, KeyboardAvoidingView, Platform } from "react-native";
+import CustomButton from "@/components/CustomButton";
+import CustomInput from "@/components/CustomInput";
+import { images } from "@/constants";
+import { useAuth } from "@/lib/authContext";
 import { Ionicons } from '@expo/vector-icons';
-import {router} from "expo-router";
+import { router } from "expo-router";
+import React, { useState } from 'react';
+import { Dimensions, Image, ImageBackground, KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import '../../globals.css';
 
 const BuyerSignIn = () => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const { login, isLoading } = useAuth();
+
+    const handleSignIn = async () => {
+        if (!username.trim() || !password.trim()) {
+            setError('Please fill in all fields');
+            return;
+        }
+
+        setError('');
+        const result = await login(username.trim(), password, 'buyer');
+
+        if (result.success) {
+            router.replace("/(buyer)/home");
+        } else {
+            setError(result.message);
+        }
+    };
+
     return (
-        <KeyboardAvoidingView
-            className="flex-1 bg-primary-cream px-6"
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
-            <View className="flex-1 justify-center">
-                <View className="items-center mb-6">
-                    <Text className="text-xl font-quicksand-bold text-primary mb-2">BUYER</Text>
-                    <Pressable className="absolute right-0">
-                        <Ionicons name="help-circle-outline" size={22} color="#7A9608" />
-                    </Pressable>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <ScrollView className="bg-white h-full" keyboardShouldPersistTaps="handled">
+                <View className="w-full relative" style={{ height: Dimensions.get('screen').height / 2.25 }}>
+                    <ImageBackground source={images.loginGraphic} className="size-full rounded-b-lg" resizeMode="stretch" />
+                    <Image source={images.logo} className="self-center size-48 absolute -bottom-16 z-10" />
                 </View>
 
-                <View className="gap-y-3">
-                    <TextInput
-                        className="border border-dashed border-[#444444] rounded-lg px-4 py-3 bg-transparent font-quicksand"
-                        placeholder="username"
-                        placeholderTextColor="#444444"
+                <View className="px-6 pt-20">
+                    <View className="items-center mb-6">
+                        <Text className="text-xl font-quicksand-bold text-primary mb-2">BUYER</Text>
+                        <Pressable className="absolute right-0">
+                            <Ionicons name="help-circle-outline" size={22} color="#7A9608" />
+                        </Pressable>
+                    </View>
+
+                    {error ? (
+                        <View className="mb-4 p-3 bg-red-100 rounded-lg">
+                            <Text className="text-red-600 font-quicksand-medium text-center">{error}</Text>
+                        </View>
+                    ) : null}
+
+                    <CustomInput
+                        placeholder="username or email"
+                        value={username}
+                        onChangeText={setUsername}
+                        autoCapitalize="none"
                     />
-                    <TextInput
-                        className="border border-dashed border-[#444444] rounded-lg px-4 py-3 bg-transparent font-quicksand"
+
+                    <CustomInput
                         placeholder="password"
-                        placeholderTextColor="#444444"
+                        value={password}
+                        onChangeText={setPassword}
                         secureTextEntry
                     />
-                </View>
 
-                <Pressable className="mt-6 h-12 rounded-xl bg-[#7A9608] justify-center items-center" onPress={() => router.push("/(buyer)/home")}>
-                    <Text className="text-white font-quicksand-bold text-base">Sign In</Text>
-                </Pressable>
+                    <CustomButton
+                        title="Sign In"
+                        onPress={handleSignIn}
+                        isLoading={isLoading}
+                        containerStyle="mt-6"
+                    />
 
-                <View className="items-center mt-6">
-                    <Text className="font-quicksand-bold text-primary mb-2">Or Continue with</Text>
-                    <Pressable className="w-2/3 h-8 rounded-lg bg-[#CAE368] flex flex-row justify-center items-center">
-                        <Ionicons name="logo-google" size={20} color="#606918" />
-                        <Text className="ml-2 font-quicksand-bold text-[#606918]">GOOGLE</Text>
-                    </Pressable>
+                    <View className="items-center mt-6">
+                        <Text className="font-quicksand-bold text-primary mb-2">Or Continue with</Text>
+                        <Pressable className="w-2/3 h-8 rounded-lg bg-[#CAE368] flex flex-row justify-center items-center">
+                            <Ionicons name="logo-google" size={20} color="#606918" />
+                            <Text className="ml-2 font-quicksand-bold text-[#606918]">GOOGLE</Text>
+                        </Pressable>
+                    </View>
+
+                    <View className="flex-row justify-center mt-6">
+                        <Text className="font-quicksand text-[#444444]">No account? </Text>
+                        <Pressable onPress={() => router.push("/buyer/sign-up")}>
+                            <Text className="font-quicksand-bold text-primary">Sign Up</Text>
+                        </Pressable>
+                    </View>
                 </View>
-                <View className="flex-row justify-center mt-6">
-                    <Text className="font-quicksand text-[#444444]">No account? </Text>
-                    <Pressable onPress={() => router.push("/buyer/sign-up")}>
-                        <Text className="font-quicksand-bold text-primary">Sign Up</Text>
-                    </Pressable>
-                </View>
-            </View>
+            </ScrollView>
         </KeyboardAvoidingView>
     );
 };
