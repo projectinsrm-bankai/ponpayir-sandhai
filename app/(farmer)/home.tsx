@@ -1,8 +1,8 @@
-import { SafeAreaView } from "react-native-safe-area-context";
-import { ScrollView, View, Text, Pressable } from "react-native";
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import {router} from "expo-router";
 import BottomNav from "@/components/BottomNav";
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { router } from "expo-router";
+import { Pressable, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function FarmerDashboard() {
     return (
@@ -57,7 +57,9 @@ export default function FarmerDashboard() {
                         <Text className="text-[#447900]">Sold: 280kg</Text>
                         <Text className="text-xs text-[#7A9608]">₹15,500</Text>
                     </View>
-                    <Text className="text-xs text-[#80875c] mt-1">View auction details in Auctions tab.</Text>
+                    <Pressable onPress={() => router.push("../(farmer)/auctionlist")}>
+                        <Text className="text-xs text-[#7A9608] mt-1 underline">View all auctions →</Text>
+                    </Pressable>
                 </View>
 
                 {/* Quick Pending Orders */}

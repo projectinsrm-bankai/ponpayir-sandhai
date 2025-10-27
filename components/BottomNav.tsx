@@ -1,7 +1,7 @@
-import {View, Text, Pressable} from 'react-native'
-import React from 'react'
-import {Ionicons} from "@expo/vector-icons";
-import {router} from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import React from 'react';
+import { Pressable, Text, View } from 'react-native';
 
 const BottomNav = () => {
     return (
@@ -15,11 +15,11 @@ const BottomNav = () => {
                 <Text className="text-xs mt-1 text-primary">Reports</Text>
             </Pressable>
             <Pressable className="items-center flex-1">
-                <Ionicons name="pricetag-outline" size={22} color="#7A9608" onPress={() => router.push("/(farmer)/auctions")}/>
+                <Ionicons name="pricetag-outline" size={22} color="#7A9608" onPress={() => router.push("/(farmer)/auctionlist")} />
                 <Text className="text-xs mt-1 text-primary">Auctions</Text>
             </Pressable>
             <Pressable className="items-center flex-1">
-                <Ionicons name="list" size={22} color="#7A9608" onPress={() => router.push("/(farmer)/orders")}/>
+                <Ionicons name="list" size={22} color="#7A9608" onPress={() => router.push("/(farmer)/orders")} />
                 <Text className="text-xs mt-1 text-primary">Orders</Text>
             </Pressable>
             <Pressable className="items-center flex-1" onPress={() => router.push("/(farmer)/notifications")}>

@@ -13,6 +13,7 @@ interface AuthContextType {
     register: (userData: any, userType: UserType) => Promise<{ success: boolean; message: string }>;
     logout: () => void;
     updateUser: (updates: Partial<User>) => void;
+    demoLogin: (userType: UserType) => Promise<{ success: boolean; message: string }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -130,6 +131,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     };
 
+    const demoLogin = async (type: UserType): Promise<{ success: boolean; message: string }> => {
+        try {
+            setIsLoading(true);
+
+            if (type === 'farmer') {
+                const { farmerDB } = await import('./farmerDB');
+                const farmer = farmerDB.findById('demo-farmer-1');
+
+                if (!farmer) {
+                    return { success: false, message: 'Demo farmer not found' };
+                }
+
+                setUser(farmer);
+                setUserType('farmer');
+                return { success: true, message: 'Demo login successful' };
+            } else {
+                // For buyer demo login, you can add similar logic
+                return { success: false, message: 'Demo buyer not available' };
+            }
+        } catch (error) {
+            return { success: false, message: 'Demo login failed' };
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const value: AuthContextType = {
         user,
         userType,
@@ -138,6 +165,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         register,
         logout,
         updateUser,
+        demoLogin,
     };
 
     return (

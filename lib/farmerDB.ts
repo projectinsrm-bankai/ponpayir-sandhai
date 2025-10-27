@@ -18,6 +18,21 @@ export interface Farmer {
 // In-memory storage for demo purposes
 let farmers: Farmer[] = [
     {
+        id: 'demo-farmer-1',
+        username: 'demo-farmer',
+        email: 'demo@farmer.com',
+        password: 'password123',
+        fullName: 'Demo Farmer',
+        phone: '+1234567890',
+        address: 'Demo Farm Road, Village',
+        farmName: 'Demo Farm',
+        farmLocation: 'Demo Location, India',
+        crops: ['Tomatoes', 'Potatoes', 'Onions'],
+        isVerified: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+    },
+    {
         id: '1',
         username: 'farmer1',
         email: 'farmer1@example.com',
